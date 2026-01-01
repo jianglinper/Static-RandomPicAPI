@@ -70,11 +70,17 @@ node build.js
 
 当 `#bg-box` 元素存在时，脚本会优先处理它。但是如果他不存在时，会去body的class元素中查找是否有`wp-theme-zibll`类名。如果有，就会去处理这个类名的元素。
 
-
 **效果：**
 *   **预加载 (Preloading)**: 只有当图片完全下载后，才会设置背景图。
 *   **Loaded Class**: 图片加载完成后，元素会被添加 `.loaded` 类名。
 *   **CSS 变量**: 加载完成后会自动更新 `--card-bg` 和 `--float-panel-bg` 变量。
+*   **背景禁用**: 支持通过 localStorage 的 `theme-bg-disabled` 键禁用背景图。
+*   **会话缓存**: 同一会话内背景图保持一致，避免频繁切换。
+
+**背景设置方案：**
+*   **方案1**：直接设置 `#bg-box` 的背景图
+*   **方案2**：检测到 `wp-theme-zibll` 主题时，增强背景样式（居中、不重复、固定、覆盖）
+*   **方案3**：回退到 `data-random-bg` 属性
 
 #### 2. 通用背景图片 (Generic Background) - 备用
 如果没有找到 `#bg-box`，脚本会回退到查找带有 `data-random-bg` 属性的元素。
@@ -103,6 +109,13 @@ console.log(urlH);
 // 获取竖屏随机图 URL (会话内保持一致)
 var urlV = window.getRandomPicV();
 console.log(urlV);
+
+// 设置背景禁用状态
+window.setBackgroundDisabled(true);  // 禁用背景
+window.setBackgroundDisabled(false); // 启用背景
+
+// 强制刷新随机背景（更换壁纸）
+window.refreshRandomBackground();
 ```
 
 ## 5. 画廊页面 (Gallery Page)
